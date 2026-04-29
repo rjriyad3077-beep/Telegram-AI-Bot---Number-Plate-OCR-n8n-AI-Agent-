@@ -35,4 +35,28 @@ This project is a simple automation workflow built using **n8n** that allows a T
 
 ![Workflow](./workflow.png)
 
+
 ---
+
+## 🚀 How to Use
+
+1. Clone this repo
+2. Import workflow into n8n
+3. Add your:
+   - Telegram Bot Token
+   - Groq API Key
+4. Run workflow
+
+---
+
+## 📌 Future Improvements
+
+- Better OCR accuracy using Vision models
+- Multi-language plate detection
+- Database storage for logs
+
+---
+
+## ⭐ Support
+
+If you like this project, give it a ⭐ on GitHub!
