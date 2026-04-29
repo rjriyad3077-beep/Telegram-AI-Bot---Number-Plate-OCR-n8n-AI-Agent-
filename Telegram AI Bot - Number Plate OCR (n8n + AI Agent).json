@@ -1,0 +1,135 @@
+{
+  "name": "Telegram AI Bot - Number Plate OCR (n8n + AI Agent)",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -64,
+        32
+      ],
+      "id": "cca70f29-0b85-4761-8ee4-8a4659f386bf",
+      "name": "Telegram Trigger",
+      "webhookId": "d02f3715-cb16-4c8e-81eb-85cbf7173033",
+      "credentials": {
+        "telegramApi": {
+          "id": "3JPUygp5RuOKwWkB",
+          "name": "Telegram account 1985199093"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "\"You are an OCR (Optical Character Recognition) assistant. I will provide you with an image of a vehicle number plate. Your task is to carefully analyze the image and extract the number plate text accurately.\n\nRules:\n\nReturn only the number plate text\nDo not add any extra words, explanations, or formatting\nIf the text is unclear or cannot be read, return exactly: 'Unable to detect'\"",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        288,
+        48
+      ],
+      "id": "f54b3654-7253-40ac-a4ac-c2a594eed715",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-20b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        208,
+        208
+      ],
+      "id": "bb506582-f0ef-4305-b8fe-db6e204c7da9",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "Daw4XCAJ3CHinpAH",
+          "name": "Groq account 29"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        640,
+        48
+      ],
+      "id": "81d517d5-133c-4804-9a9e-c7e9f6bef871",
+      "name": "Send a text message",
+      "webhookId": "d4e11e8b-a6eb-430c-8b6d-1913f6118d02",
+      "credentials": {
+        "telegramApi": {
+          "id": "3JPUygp5RuOKwWkB",
+          "name": "Telegram account 1985199093"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "68b8b158-060d-46aa-9778-9b88944935f4",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "50918ee0be4fd9ad8edd59da0eb4c4a6502c186d6a425a1cf635ba824838446e"
+  },
+  "id": "tiuFSwC6pCwSBLUX",
+  "tags": []
+}
